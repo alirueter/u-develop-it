@@ -16,6 +16,11 @@ const db = new sqlite3.Database('./db/election.db', err => {
     console.log('Connected to the election database.');
 });
 
+// //show all candidates 
+// db.all(`SELECT * FROM candidates`, (err, rows) => {
+//     console.log(rows);
+// });
+
 //MUST GO LAST // default response for any other request(Not Found) catch all
 app.use((req, res) => {
     res.status(404).end();
