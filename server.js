@@ -21,6 +21,34 @@ const db = new sqlite3.Database('./db/election.db', err => {
 //     console.log(rows);
 // });
 
+// //GET a single candidate
+// db.get(`SELECT * FROM candidates WHERE id = 1`, (err, row) => {
+//     if (err) {
+//         console.log(err);
+//     }
+//     console.log(row);
+// });
+
+// //delete a candidate
+// db.run(`DELETE FROM candidates WHERE id = ?`, 1, function(err, result) {
+//     if (err) {
+//         console.log(err);
+//     }
+//     console.log(result, this, this.changes);
+// });
+
+//create a candidate
+const sql = `INSERT INTO candidates (id, first_name, last_name, industry_connected)
+                VALUES (?,?,?,?)`;
+const params = [1, 'Ronald', 'Firbank', 1];
+//ES5 function, not arrow function, to use this
+db.run(sql, params, function(err, result) {
+    if (err) {
+        console.log(err);
+    }
+    console.log(result, this.lastID);
+});
+
 //MUST GO LAST // default response for any other request(Not Found) catch all
 app.use((req, res) => {
     res.status(404).end();
