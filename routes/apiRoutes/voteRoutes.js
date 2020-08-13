@@ -1,0 +1,33 @@
+const express = require('express');
+const router = require('express').Router();
+const db = require('../../db/database');
+const inputCheck = require('../../utils/inputCheck');
+
+//add new votes
+router.post('/vote', ({body}, res) => {
+    //data validation
+    const errors = inputCheck(body, 'voter_id', 'candidate_id');
+    if (errors) {
+        res.status(400).json({error: errors});
+        return;
+    }
+
+    //prepare statement
+    const sql = `INSERT INTO votes (voter_id, candidate_id) VALUES (?,?)`;
+    const params = [body.voter_id, body.candidate_id];
+
+    //execute
+    db.run(sql, params, function(err, result) {
+        if (err) {
+            res.status(400).json({error: err.message});
+            return;
+        }
+        res.json({
+            message: 'success',
+            data: body,
+            id: this.lastID
+        });
+    });
+});
+
+module.exports = router;
